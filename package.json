@@ -6,7 +6,7 @@
     "type": "module",
     "scripts": {
         "start": "node ./index.js & npm run start:backend",
-        "start:dev": "nodemon ./index.js",
+        "start:dev": "nodemon ./index.js & npm run start:backend",
         "test": "echo \"Error: no test specified\" && exit 1",
         "start:backend": "tsx ./src/ws_server/index.ts"
     },
