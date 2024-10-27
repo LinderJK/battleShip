@@ -5,9 +5,8 @@ export const rooms = new Map<number, IUser[]>()
 export const addUserToRoom = (roomId: number, user: IUser) => {
     if (rooms.has(roomId)) {
         rooms.get(roomId)?.push(user)
-    } else {
-        rooms.set(roomId, [user])
     }
+    console.log(rooms, 'CHECK ROOM')
 }
 
 export const getRoomUsers = (roomId: number) => {
@@ -17,15 +16,23 @@ export const getRoomUsers = (roomId: number) => {
 export const createRoom = (user: IUser) => {
     const roomId = user.index
     rooms.set(roomId, [user])
+    // console.log(rooms, 'CHECK ROOM')
     return roomId
 }
 
-export const getRoom = (roomId: number) => {
-    return rooms.get(roomId)
+export const getRoom = (roomId: number | undefined) => {
+    if (roomId) {
+        return rooms.get(roomId)
+    }
+    // console.log(rooms, 'CHECK ROOM')
 }
 
-const deleteRoom = (roomId: number) => {
-    rooms.delete(roomId)
+export const deleteRooms = (roomId: Array<number | undefined>) => {
+    roomId.forEach((id) => {
+        if (id) {
+            rooms.delete(id)
+        }
+    })
 }
 
 export const getAllRooms = () => {
