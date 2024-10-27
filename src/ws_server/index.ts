@@ -16,6 +16,13 @@ wsServer.on('connection', (ws: WebSocket) => {
         ws.send(data)
     }
 
+    const broadcastCallback = (data: string) => {
+        console.log(wsServer.clients.size)
+        wsServer.clients.forEach((client) => {
+            client.send(data)
+        })
+    }
+
     let currentClient: IClient
 
     ws.on('message', (message) => {
@@ -29,14 +36,17 @@ wsServer.on('connection', (ws: WebSocket) => {
                     const client = createClient(player.index, player.name, ws)
                     if (client) currentClient = client
                 }
-                wsUpdateRoomAction(currentClient, sendCallback)
+                wsUpdateRoomAction(broadcastCallback)
                 break
             }
             case 'create_room': {
                 console.log(JSON.parse(message.toString()))
                 wsCreateRoomAction(currentClient, sendCallback)
-                wsUpdateRoomAction(currentClient, sendCallback)
+                wsUpdateRoomAction(broadcastCallback)
                 break
+            }
+            case 'add_user_to_room': {
+                console.log(data)
             }
         }
     })

@@ -19,7 +19,7 @@ export const wsCreateRoomAction = (
             console.log('CREATE ROOM')
             createRoom(player)
         } else {
-            //добавление
+            //заглушка под ошибку
         }
 
         console.log('SEND INFO')
@@ -44,16 +44,15 @@ export const wsCreateRoomAction = (
     }
 }
 
-export const wsUpdateRoomAction = (
-    currentClient: IClient,
-    sendCallback: (data: string) => void
-) => {
+export const wsUpdateRoomAction = (callback: (data: string) => void) => {
     const roomsData = getAllRooms()
+    console.log(roomsData, 'ROOMS DATA1')
+    console.log(JSON.stringify(roomsData), 'ROOMS DATA2')
     const updateMessage = JSON.stringify({
         type: 'update_room',
         data: JSON.stringify(roomsData),
         id: 0,
     })
-
-    sendCallback(updateMessage)
+    console.log(updateMessage, 'UPDATE MESSAGE')
+    callback(updateMessage)
 }
