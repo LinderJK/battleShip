@@ -3,7 +3,7 @@ import { IRegRequest } from '../types/wsTypes'
 export interface IUser {
     name: string
     password: string
-    index?: number
+    index: number
 }
 
 const players = new Map<string, IUser>()
@@ -14,14 +14,26 @@ export const savePlayer = (data: IRegRequest): IUser | undefined => {
 
     if (!player) {
         index += 1
-        players.set(data.name, {
+        const newUser: IUser = {
             name: data.name,
             password: data.password,
             index: index,
-        })
-        console.log(players, players.get(data.name))
-        return players.get(data.name)
+        }
+        console.log(newUser, index, 'INDEX')
+        players.set(data.name, newUser)
+        console.log(players, newUser)
+        return newUser
     } else {
         return undefined
+    }
+}
+
+export const getPlayers = () => {
+    return players
+}
+
+export const getPlayer = (name: string | undefined) => {
+    if (name) {
+        return players.get(name)
     }
 }
