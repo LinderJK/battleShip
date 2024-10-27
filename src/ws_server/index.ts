@@ -1,30 +1,50 @@
 import { WebSocketServer } from 'ws'
-
+import * as WebSocket from 'ws'
 import { wsMessages } from './types/wsTypes'
 import { wsRegAction } from './actions/wsRegAction'
+import { wsCreateRoomAction, wsUpdateRoomAction } from './actions/wsRoomAction'
+import { createClient, deleteClient, IClient } from './models/wsClientsModel'
 
 const PORT = 3000
 
 const wsServer = new WebSocketServer({ port: PORT })
 
-wsServer.on('connection', (ws) => {
-    console.log('Client connected')
+wsServer.on('connection', (ws: WebSocket) => {
+    console.log(`Client connected`)
 
-    const callback = (data: string) => {
+    const sendCallback = (data: string) => {
         ws.send(data)
     }
+
+    let currentClient: IClient
 
     ws.on('message', (message) => {
         const data = JSON.parse(message.toString()) as wsMessages
 
         switch (data.type) {
             case 'reg': {
-                wsRegAction(data, callback)
+                const player = wsRegAction(data, sendCallback)
+
+                if (player) {
+                    const client = createClient(player.index, player.name, ws)
+                    if (client) currentClient = client
+                }
+                wsUpdateRoomAction(currentClient, sendCallback)
                 break
             }
             case 'create_room': {
+                console.log(JSON.parse(message.toString()))
+                wsCreateRoomAction(currentClient, sendCallback)
+                wsUpdateRoomAction(currentClient, sendCallback)
                 break
             }
+        }
+    })
+
+    ws.on('close', () => {
+        console.log(`Client disconnected`)
+        if (currentClient) {
+            deleteClient(currentClient.index)
         }
     })
 })
@@ -39,7 +59,7 @@ const wsShutdown = () => {
     )
     wsServer.close(() => {
         console.log('WebSocket server closed.')
-        process.exit(0) // Завершаем процесс
+        process.exit(0) // Завершаем процесс TODO: поменять, некорретно работает
     })
 }
 process.on('SIGINT', wsShutdown)
