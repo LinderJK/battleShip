@@ -1,4 +1,4 @@
-import { savePlayer } from '../models/usersModel'
+import { getPlayers, savePlayer } from '../models/usersModel'
 import { IRegRequest, wsMessages } from '../types/wsTypes'
 
 export const wsRegAction = (
@@ -12,6 +12,7 @@ export const wsRegAction = (
     }
 
     const player = savePlayer(data as IRegRequest)
+    console.log(getPlayers(), player)
 
     if (!player) {
         callback(
@@ -40,4 +41,5 @@ export const wsRegAction = (
             })
         )
     }
+    return player
 }
