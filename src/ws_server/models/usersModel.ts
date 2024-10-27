@@ -2,7 +2,7 @@ import { IRegRequest } from '../types/wsTypes'
 
 export interface IUser {
     name: string
-    password: string
+    // password: string
     index: number
 }
 
@@ -16,7 +16,7 @@ export const savePlayer = (data: IRegRequest): IUser | undefined => {
         index += 1
         const newUser: IUser = {
             name: data.name,
-            password: data.password,
+            // password: data.password,
             index: index,
         }
         console.log(newUser, index, 'INDEX')
