@@ -2,8 +2,13 @@ import { WebSocketServer } from 'ws'
 import * as WebSocket from 'ws'
 import { wsMessages } from './types/wsTypes'
 import { wsRegAction } from './actions/wsRegAction'
-import { wsCreateRoomAction, wsUpdateRoomAction } from './actions/wsRoomAction'
+import {
+    wsAddUserToRoomAction,
+    wsCreateRoomAction,
+    wsUpdateRoomAction,
+} from './actions/wsRoomAction'
 import { createClient, deleteClient, IClient } from './models/wsClientsModel'
+import { deleteRooms } from './models/roomModel'
 
 const PORT = 3000
 
@@ -47,6 +52,9 @@ wsServer.on('connection', (ws: WebSocket) => {
             }
             case 'add_user_to_room': {
                 console.log(data)
+                wsAddUserToRoomAction(currentClient, data)
+                wsUpdateRoomAction(broadcastCallback)
+                break
             }
         }
     })
@@ -55,6 +63,8 @@ wsServer.on('connection', (ws: WebSocket) => {
         console.log(`Client disconnected`)
         if (currentClient) {
             deleteClient(currentClient.index)
+            deleteRooms([currentClient.index])
+            wsUpdateRoomAction(broadcastCallback)
         }
     })
 })
