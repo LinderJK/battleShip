@@ -1,11 +1,15 @@
 import { IClient } from '../models/wsClientsModel'
 import { getPlayer } from '../models/usersModel'
 import {
+    addUserToRoom,
     createRoom,
+    deleteRoom,
+    deleteRooms,
     getAllRooms,
     getRoom,
     getRoomUsers,
 } from '../models/roomModel'
+import { wsMessages } from '../types/wsTypes'
 
 export const wsCreateRoomAction = (
     currentClient: IClient,
@@ -16,13 +20,11 @@ export const wsCreateRoomAction = (
     if (player) {
         const roomId = player.index
         if (!getRoom(roomId)) {
-            console.log('CREATE ROOM')
             createRoom(player)
         } else {
             //заглушка под ошибку
         }
 
-        console.log('SEND INFO')
         sendCallback(
             JSON.stringify({
                 type: 'create_room',
@@ -46,13 +48,35 @@ export const wsCreateRoomAction = (
 
 export const wsUpdateRoomAction = (callback: (data: string) => void) => {
     const roomsData = getAllRooms()
-    console.log(roomsData, 'ROOMS DATA1')
-    console.log(JSON.stringify(roomsData), 'ROOMS DATA2')
     const updateMessage = JSON.stringify({
         type: 'update_room',
         data: JSON.stringify(roomsData),
         id: 0,
     })
-    console.log(updateMessage, 'UPDATE MESSAGE')
+
     callback(updateMessage)
+}
+
+export const wsAddUserToRoomAction = (
+    currentClient: IClient,
+    message: wsMessages
+) => {
+    const player = getPlayer(currentClient.name)
+    const data =
+        typeof message.data === 'string'
+            ? JSON.parse(message.data)
+            : message.data
+
+    console.log('MESSAGE ADDD USER TO ROOM', data, message)
+    console.log('ADD USER TO ROOM', data)
+    if (player) {
+        console.log('PLAYER want to room', player)
+        const roomId = data.indexRoom
+        console.log('ROOM ID', roomId, data.indexRoom, typeof data.indexRoom)
+        if (getRoom(roomId)) {
+            console.log('START add user', roomId, player)
+            addUserToRoom(roomId, player)
+            deleteRooms([roomId, player.index])
+        }
+    }
 }
