@@ -43,6 +43,8 @@ export const wsCreateRoomAction = (
             })
         )
     }
+
+    console.log("Command " + 'create_room', player)
 }
 
 export const wsUpdateRoomAction = (callback: (data: string) => void) => {
@@ -54,6 +56,7 @@ export const wsUpdateRoomAction = (callback: (data: string) => void) => {
     })
 
     callback(updateMessage)
+    console.log("Command " + 'update_room', roomsData)
 }
 
 export const wsAddUserToRoomAction = (
@@ -78,4 +81,5 @@ export const wsAddUserToRoomAction = (
             deleteRooms([roomId, player.index])
         }
     }
+    console.log("Command " + 'add_user_to_room', data)
 }
