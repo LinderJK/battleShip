@@ -6,7 +6,7 @@ export const addUserToRoom = (roomId: number, user: IUser) => {
     if (rooms.has(roomId)) {
         rooms.get(roomId)?.push(user)
     }
-    console.log(rooms, 'CHECK ROOM')
+    // console.log(rooms, 'CHECK ROOM')
 }
 
 export const getRoomUsers = (roomId: number) => {

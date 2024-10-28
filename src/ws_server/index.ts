@@ -45,13 +45,13 @@ wsServer.on('connection', (ws: WebSocket) => {
                 break
             }
             case 'create_room': {
-                console.log(JSON.parse(message.toString()))
+                // console.log(JSON.parse(message.toString()))
                 wsCreateRoomAction(currentClient, sendCallback)
                 wsUpdateRoomAction(broadcastCallback)
                 break
             }
             case 'add_user_to_room': {
-                console.log(data)
+                // console.log(data)
                 wsAddUserToRoomAction(currentClient, data)
                 wsUpdateRoomAction(broadcastCallback)
                 break
@@ -79,7 +79,7 @@ const wsShutdown = () => {
     )
     wsServer.close(() => {
         console.log('WebSocket server closed.')
-        process.exit(0) // Завершаем процесс TODO: поменять, некорретно работает
+        process.exit(0)
     })
 }
 process.on('SIGINT', wsShutdown)

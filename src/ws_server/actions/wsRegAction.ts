@@ -12,7 +12,7 @@ export const wsRegAction = (
     }
 
     const player = savePlayer(data as IRegRequest)
-    console.log(getPlayers(), player)
+    // console.log(getPlayers(), player)
 
     if (!player) {
         callback(

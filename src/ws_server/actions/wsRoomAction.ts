@@ -3,7 +3,6 @@ import { getPlayer } from '../models/usersModel'
 import {
     addUserToRoom,
     createRoom,
-    deleteRoom,
     deleteRooms,
     getAllRooms,
     getRoom,
@@ -67,14 +66,14 @@ export const wsAddUserToRoomAction = (
             ? JSON.parse(message.data)
             : message.data
 
-    console.log('MESSAGE ADDD USER TO ROOM', data, message)
-    console.log('ADD USER TO ROOM', data)
+    // console.log('MESSAGE ADDD USER TO ROOM', data, message)
+    // console.log('ADD USER TO ROOM', data)
     if (player) {
-        console.log('PLAYER want to room', player)
+        // console.log('PLAYER want to room', player)
         const roomId = data.indexRoom
-        console.log('ROOM ID', roomId, data.indexRoom, typeof data.indexRoom)
+        // console.log('ROOM ID', roomId, data.indexRoom, typeof data.indexRoom)
         if (getRoom(roomId)) {
-            console.log('START add user', roomId, player)
+            // console.log('START add user', roomId, player)
             addUserToRoom(roomId, player)
             deleteRooms([roomId, player.index])
         }

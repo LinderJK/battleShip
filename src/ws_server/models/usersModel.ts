@@ -19,9 +19,9 @@ export const savePlayer = (data: IRegRequest): IUser | undefined => {
             // password: data.password,
             index: index,
         }
-        console.log(newUser, index, 'INDEX')
+        // console.log(newUser, index, 'INDEX')
         players.set(data.name, newUser)
-        console.log(players, newUser)
+        // console.log(players, newUser)
         return newUser
     } else {
         return undefined
